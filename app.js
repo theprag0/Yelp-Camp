@@ -35,6 +35,7 @@ app.set("view engine", "ejs");
 app.use(methodOverride("_method"));
 app.use(flash());
 
+app.locals.moment=require("moment");
 //AUTH CONFIG
 app.use(require("express-session")({
     secret:"He he he",

@@ -22,7 +22,7 @@ router.get("/", function(req, res){
        if(err){
            console.log(err);
        } else {
-          res.render("campgrounds/camps",{campgrounds:allCampgrounds});
+          res.render("campgrounds/camps",{campgrounds:allCampgrounds,page:"campgrounds"});
        }
     });
 });
@@ -41,6 +41,7 @@ router.post("/",middleware.isLoggedIn,function(req, res){
     geocoder.geocode(req.body.location, function (err, data) {
         if (err || !data.length) {
           req.flash('error', 'Invalid address');
+          console.log(err);
           return res.redirect('back');
         }
     
@@ -76,7 +77,6 @@ router.get("/:id", function(req, res){
             req.flash('error', 'Sorry, that campground does not exist!');
             return res.redirect('/campgrounds');
         }
-        console.log(foundCampground)
         //render show template with that campground
         res.render("campgrounds/show", {campground: foundCampground});
     });
