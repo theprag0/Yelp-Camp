@@ -5,16 +5,20 @@
     <div style="margin: 25px auto;width: 30%;">
         <form action="/campgrounds/<%=campground._id%>?_method=PUT" method="POST">
             <div class="form-group">
-                <input class="form-control" type="text" name="data[name]" value="<%=campground.name%>">
+                <input class="form-control" type="text" name="data[name]" value="<%=campground.name%>" required>
             </div>
             <div class="form-group">
-                <input class="form-control" type="number" name="data[price]" placeholder="Enter the price/night in USD" min="0.01" step="0.01">
+                <input class="form-control" type="number" name="data[price]" placeholder="Enter the price/night in USD" min="0.01" step="0.01" required>
             </div>
             <div class="form-group">
-                <input class="form-control" type="text" name="data[image]" value="<%=campground.image%>">
+                <input class="form-control" type="text" name="data[image]" value="<%=campground.image%>" required>
             </div>
             <div class="form-group">
-            <textarea name="data[description]" class="form-control" cols="30" rows="10"><%=campground.description%></textarea>
+                <label for="location">Location</label>
+                <input class="form-control" type="text" name="location" id="location" value="<%= campground.location %>" required>
+            </div>
+            <div class="form-group">
+            <textarea name="data[description]" class="form-control" cols="30" rows="10" required><%=campground.description%></textarea>
             </div>  
             <div class="form-group">
              <input type="submit" class="btn btn-primary btn-lg btn-block">
