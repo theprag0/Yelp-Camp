@@ -1,0 +1,35 @@
+<%-include("../partials/header")%>
+<div class="row justify-content-center">
+    <h1 class="text-center col-sm-12">Change Review</h1>
+    <div class="col-xs-12 mb-6">
+        <form action="/campgrounds/<%= campground_slug %>/reviews/<%= review._id %>?_method=PUT" method="POST">
+            <div class="form-group">
+                <fieldset class="starability-slot starability-checkmark form-control" id="rating">
+                <legend class="form-item">Leave a Rating:</legend>
+                <input type="radio" id="rate5" name="review[rating]" value="5" />
+                <label for="rate5" title="Amazing">5 Stars</label>
+               
+                <input type="radio" id="rate4" name="review[rating]" value="4" />
+                <label for="rate4" title="Very good">4 Stars</label>
+                
+                <input type="radio" id="rate3" name="review[rating]" value="3" />
+                <label for="rate3" title="Average">3 Stars</label>
+               
+                <input type="radio" id="rate2" name="review[rating]" value="2" />
+                <label for="rate2" title="Not good">2 Stars</label>
+                
+                <input type="radio" id="rate1" name="review[rating]" value="1" />
+                <label for="rate1" title="Terrible">1 Star</label>
+                </fieldset>
+            </div>
+            <div class="form-group">
+                <textarea class="form-control" type="text" name="review[text]" placeholder="Write a review for this review..." rows="5"><%= review.text %></textarea>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary btn-block">Submit a Review</button>
+            </div>
+        </form>
+        <a href="/campgrounds/<%= campground_slug %>">Go Back</a>
+    </div>
+</div>
+<%-include("../partials/footer")%>

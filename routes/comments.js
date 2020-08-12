@@ -7,8 +7,7 @@ var middleware=require("../middleware");
 //Comments New
 router.get("/new", middleware.isLoggedIn, function(req, res){
     // find campground by id
-    console.log(req.params.id);
-    Campground.findById(req.params.id, function(err, campground){
+    Campground.findOne({slug:req.params.slug}, function(err, campground){
         if(err){
             console.log(err);
         } else {
@@ -20,7 +19,7 @@ router.get("/new", middleware.isLoggedIn, function(req, res){
 //Comments Create
 router.post("/",middleware.isLoggedIn,function(req, res){
    //lookup campground using ID
-   Campground.findById(req.params.id, function(err, campground){
+   Campground.findOne({slug:req.params.slug}, function(err, campground){
        if(err){
            console.log(err);
            res.redirect("/campgrounds");
@@ -32,12 +31,13 @@ router.post("/",middleware.isLoggedIn,function(req, res){
                //add username and id to comment
                comment.author.id = req.user._id;
                comment.author.username = req.user.username;
+               comment.author.avatar=req.user.avatar||"https://t3.ftcdn.net/jpg/01/45/53/32/240_F_145533232_oItfubiWD3H9lhQOv2LwYvWjPHESPTP4.jpg";
                //save comment
                comment.save();
                campground.comments.push(comment);
                campground.save();
                req.flash("success","Comment added successfully!")
-               res.redirect('/campgrounds/' + campground._id);
+               res.redirect('/campgrounds/' + campground.slug);
            }
         });
        }
@@ -46,7 +46,13 @@ router.post("/",middleware.isLoggedIn,function(req, res){
 
 // UPDATE COMMENT ROUTE
 router.get("/:comment_id/edit", middleware.isLoggedIn, middleware.checkCommentOwnership, function(req, res){
-    res.render("comments/edit", {campground_id: req.params.id, comment: req.comment});
+    Comment.findById(req.params.comment_id, function(err, foundComment){
+        if(err){
+            res.redirect("back");
+        } else {
+          res.render("comments/edit", {campground_slug: req.params.slug, comment: foundComment});
+        }
+     });
   });
 
 router.put("/:comment_id",middleware.checkCommentOwnership,function(req,res){
@@ -55,7 +61,7 @@ router.put("/:comment_id",middleware.checkCommentOwnership,function(req,res){
             res.redirect("back");
         }else{
             req.flash("success","Comment edited succesfully")
-            res.redirect("/campgrounds/"+req.params.id)
+            res.redirect("/campgrounds/"+req.params.slug)
         }
     })
 })
@@ -67,7 +73,7 @@ router.delete("/:comment_id",middleware.checkCommentOwnership,function(req,res){
             res.redirect("back");
         }else{
             req.flash("success","Deleted Comment!");
-            res.redirect("/campgrounds/"+req.params.id);
+            res.redirect("/campgrounds/"+req.params.slug);
         }
     })
 })
